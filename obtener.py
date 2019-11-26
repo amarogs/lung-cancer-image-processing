@@ -24,3 +24,11 @@ response = client.get_series(modality="CT", collection="LungCT-Diagnosis")
 strRespSeries = getResponseString(response)
 
 pdfSeries = pandas.io.json.read_json(strRespSeries)
+
+strSeriesUID = pdfSeries.ix[2].SeriesInstanceUID
+response = client.get_image(strSeriesUID)
+strResponseImage = getResponseString(response)
+
+with open("images.zip", "wb") as fid:
+    fid.write(strResponseImage)
+    fid.close()

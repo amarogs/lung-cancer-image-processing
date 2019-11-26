@@ -2,7 +2,7 @@ import pydicom
 import numpy as np
 import matplotlib.pyplot as plt
 import SimpleITK as sitk
-
+import funciones
 
 import sys
 import os
@@ -54,25 +54,24 @@ for i, s in enumerate(slices):
 
 # plot 3 orthogonal slices
 a1 = plt.subplot(2, 2, 1)
-plt.imshow(img3d[:, :, img_shape[2]//2], cmap="gray")
+plt.imshow(img3d[:, :, 0], cmap="gray")
 a1.set_aspect(ax_aspect)
 
-a2 = plt.subplot(2, 2, 2)
-plt.imshow(img3d[:, img_shape[1]//2, :], cmap="gray")
-a2.set_aspect(sag_aspect)
+# a2 = plt.subplot(2, 2, 2)
+# plt.imshow(img3d[:, img_shape[1]//2, :], cmap="gray")
+# a2.set_aspect(sag_aspect)
 
-a3 = plt.subplot(2, 2, 3)
-plt.imshow(img3d[img_shape[0]//2, :, :].T, cmap="gray")
-a3.set_aspect(cor_aspect)
+# a3 = plt.subplot(2, 2, 3)
+# plt.imshow(img3d[img_shape[0]//2, :, :].T, cmap="gray")
+# a3.set_aspect(cor_aspect)
 
-plt.show()
+# plt.show()
+
+img_3d_hu = funciones.get_pixels_hu(slices)
 
 
-img = sitk.GetImageFromArray(img3d)
+img_binaria = funciones.lung_segmentation(img_3d_hu, (250,250,100), (250,250,100))
 
-img = sitk.CurvatureFlow(image1=img,
-                         timeStep=0.125,
-                         numberOfIterations=5)
-
-img = sitk.GetArrayFromImage(img)
-plt.imshow(img, cmap="gray")
+a1 = plt.subplot(2, 2, 1)
+plt.imshow(img_binaria[:, :, 0], cmap="gray")
+a1.set_aspect(ax_aspect)
