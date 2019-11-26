@@ -68,7 +68,11 @@ a3.set_aspect(cor_aspect)
 plt.show()
  
 
-img = sitk.GetImageFromArray(img3d[:, :, img_shape[2]//2])
-feature_img = sitk.GradientMagnitude(img)
-plt.imshow(sitk.GetArrayFromImage(feature_img), cmap="gray")
+img = sitk.GetImageFromArray(img3d)
 
+img =sitk.CurvatureFlow(image1=img,
+                        timeStep=0.125,
+                        numberOfIterations=5)
+
+img = sitk.GetArrayFromImage(img)
+plt.imshow(img, cmap="gray")
