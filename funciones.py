@@ -7,3 +7,5 @@ def lung_segmentation(imagen, p1, p2):
 def holaAmaro():
     print("Hola Amaro")
 
+def holaAmaro2():
+    print("Hola Amaro")
