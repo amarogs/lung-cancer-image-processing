@@ -6,7 +6,7 @@ import SimpleITK as sitk
 
 import sys
 import os
-#skdjflksjdflksjflk
+
 # load the DICOM files
 files = []
 directorio = "./images"
