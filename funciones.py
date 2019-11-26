@@ -9,3 +9,5 @@ def holaAmaro():
 
 def holaAmaro2():
     print("Hola Amaro")
+
+holaAmaro()
