@@ -1,3 +1,5 @@
 ./pruebas.py
-
+./.vscode
+./.vscode/*
+__pycache__
 

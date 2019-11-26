@@ -11,7 +11,7 @@ import os
 files = []
 directorio = "./images"
 for fname in os.listdir(directorio):
-    
+
     if fname[-3::] == "dcm":
         print("loading: {}".format(directorio+"/"+fname))
         files.append(pydicom.read_file(directorio+"/"+fname))
@@ -58,7 +58,7 @@ plt.imshow(img3d[:, :, img_shape[2]//2], cmap="gray")
 a1.set_aspect(ax_aspect)
 
 a2 = plt.subplot(2, 2, 2)
-plt.imshow(img3d[:, img_shape[1]//2, :],cmap="gray")
+plt.imshow(img3d[:, img_shape[1]//2, :], cmap="gray")
 a2.set_aspect(sag_aspect)
 
 a3 = plt.subplot(2, 2, 3)
@@ -66,13 +66,13 @@ plt.imshow(img3d[img_shape[0]//2, :, :].T, cmap="gray")
 a3.set_aspect(cor_aspect)
 
 plt.show()
- 
+
 
 img = sitk.GetImageFromArray(img3d)
 
-img =sitk.CurvatureFlow(image1=img,
-                        timeStep=0.125,
-                        numberOfIterations=5)
+img = sitk.CurvatureFlow(image1=img,
+                         timeStep=0.125,
+                         numberOfIterations=5)
 
 img = sitk.GetArrayFromImage(img)
 plt.imshow(img, cmap="gray")
