@@ -58,10 +58,35 @@ def lung_segmentation(imagen_hu, s1, s2):
 
     #Obtenemos el crecimiento de regiones partiendo de s1, s2.
     #El resultado es una imagen binarizada.
-    img = sitk.ConnectedThreshold(img,[s1,s2], lower=-1000, upper=-200)
+    img = sitk.ConnectedThreshold(img,[s1,s2], lower=-1024.0, upper=3071.0)
 
     #Realizamos un cierre morfológico para unir pequeñas regiones separadas
     #img = sitk.BinaryMorphologicalClosing(img, 12, kenerl=)
 
     #Devolvemos la imagen como array N-dimensional
     return sitk.GetArrayFromImage(img)
+
+
+def prueba():
+    """Este método recibe una array N-dimensional con valores de intensidad en 
+    escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
+    #Transformamos la imagen N-dimensional a una imagen de ITK.
+    imagen_hu = np.zeros((9,9,5))
+    imagen_hu[4:6,4:6,2:4] = 5
+    
+    
+    img = sitk.GetImageFromArray(imagen_hu)
+
+    #Aplicamos el filtro de suavizado Curvature Flow
+    #img = sitk.CurvatureFlow(image1=img, timeStep=0.125, numberOfIterations=5)
+
+    #Obtenemos el crecimiento de regiones partiendo de s1, s2.
+    #El resultado es una imagen binarizada.
+    
+    img = sitk.ConnectedThreshold(img, [(2,4,4)], lower=4.0, upper=6.0)
+    
+    #Realizamos un cierre morfológico para unir pequeñas regiones separadas
+    #img = sitk.BinaryMorphologicalClosing(img, 12, kenerl=)
+
+    #Devolvemos la imagen como array N-dimensional
+    return imagen_hu, sitk.GetArrayFromImage(img)

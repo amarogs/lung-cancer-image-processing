@@ -70,7 +70,7 @@ a1.set_aspect(ax_aspect)
 img_3d_hu = funciones.get_pixels_hu(slices)
 
 
-img_binaria = funciones.lung_segmentation(img_3d_hu, (250,250,100), (250,250,100))
+img_binaria = funciones.lung_segmentation(img_3d_hu, (500,0,0), (0,0,0))
 
 a1 = plt.subplot(2, 2, 1)
 plt.imshow(img_binaria[:, :, 0], cmap="gray")
