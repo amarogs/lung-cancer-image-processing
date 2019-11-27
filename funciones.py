@@ -47,11 +47,11 @@ def get_pixels_hu(slices):
     return image
 
 
-def lung_segmentation(imagen, s1, s2):
+def lung_segmentation(imagen_hu, s1, s2):
     """Este método recibe una array N-dimensional con valores de intensidad en 
     escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
     #Transformamos la imagen N-dimensional a una imagen de ITK.
-    img = sitk.GetImageFromArray(imagen)
+    img = sitk.GetImageFromArray(imagen_hu)
 
     #Aplicamos el filtro de suavizado Curvature Flow
     img = sitk.CurvatureFlow(image1=img, timeStep=0.125,numberOfIterations=5)
