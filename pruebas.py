@@ -9,7 +9,7 @@ import os
 
 # load the DICOM files
 files = []
-directorio = "./images"
+directorio = "./database/0/"
 for fname in os.listdir(directorio):
 
     if fname[-3::] == "dcm":
@@ -54,7 +54,7 @@ for i, s in enumerate(slices):
 
 # plot 3 orthogonal slices
 a1 = plt.subplot(2, 2, 1)
-plt.imshow(img3d[:, :, 0], cmap="gray")
+plt.imshow(img3d[:, :, img_shape[2]//2], cmap="gray")
 a1.set_aspect(ax_aspect)
 
 # a2 = plt.subplot(2, 2, 2)
@@ -69,9 +69,10 @@ a1.set_aspect(ax_aspect)
 
 img_3d_hu = funciones.get_pixels_hu(slices)
 
+s1 = (150, 250, img_shape[2]//2)
+img_binaria = funciones.lung_segmentation(img_3d_hu, s1, s1)
 
-img_binaria = funciones.lung_segmentation(img_3d_hu, (500,0,0), (0,0,0))
 
-a1 = plt.subplot(2, 2, 1)
-plt.imshow(img_binaria[:, :, 0], cmap="gray")
-a1.set_aspect(ax_aspect)
+plt.imshow(img_binaria[:, :, img_shape[2]//2], cmap="gray")
+plt.imshow(img_3d_hu[:, :, img_shape[2]//2], cmap="gray")
+
