@@ -4,12 +4,12 @@ import matplotlib.pyplot as plt
 
 
 
-def lung_segmentation(img, seedList):
+def lung_segmentation(img_original, seedList):
     """Este método recibe una array N-dimensional con valores de intensidad en 
     escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
 
     # Aplicamos el filtro de suavizado Curvature Flow
-    img = sitk.CurvatureFlow(image1=img, timeStep=0.125, numberOfIterations=5)
+    img = sitk.CurvatureFlow(image1=img_original, timeStep=0.125, numberOfIterations=5)
 
     # Obtenemos el crecimiento de regiones partiendo de la lista de semillas
     # El resultado es una imagen binarizada.
@@ -18,42 +18,30 @@ def lung_segmentation(img, seedList):
     # Realizamos un cierre morfológico para unir pequeñas regiones separadas
     img = sitk.BinaryMorphologicalClosing(img, 12, sitk.sitkBall)
 
-    # Devolvemos la imagen como array N-dimensional
-    return img
+    #Convertimos la imagen binaria en el mismo tipo que la imagen original
+    img= sitk.Cast(img, sitk.sitkInt16)
 
+    #Como dentro de la escala HU etá incluido el 0, vamos a sumar 1024 para que al multiplicar, el menor valor de la nueva
+    #escala sea 0
+    img_original = img_original + 1024
 
-def prueba():
-    """Este método recibe una array N-dimensional con valores de intensidad en 
-    escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
-    # Transformamos la imagen N-dimensional a una imagen de ITK.
-    imagen_hu = np.zeros((9, 9, 5))
-    imagen_hu[4:6, 4:6, 2:4] = 5
+    #Realizamos la segmentación de los pulmones
+    img_segmentada = sitk.Multiply(img,img_original)
 
-    img = sitk.GetImageFromArray(imagen_hu)
+    #Reescalamos a HU
+    img_segmentada= img_segmentada-1024
 
-    # Aplicamos el filtro de suavizado Curvature Flow
-    #img = sitk.CurvatureFlow(image1=img, timeStep=0.125, numberOfIterations=5)
-
-    # Obtenemos el crecimiento de regiones partiendo de s1, s2.
-    # El resultado es una imagen binarizada.
-
-    img = sitk.ConnectedThreshold(img, [(2, 4, 4)], lower=4.0, upper=6.0)
-    sitk.ConnectedThreshold()
-
-    # Realizamos un cierre morfológico para unir pequeñas regiones separadas
-    # img = sitk.BinaryMorphologicalClosing(img, 12, kenerl=)
-
-    # Devolvemos la imagen como array N-dimensional
-    return imagen_hu, sitk.GetArrayFromImage(img)
-
+    # Devolvemos la imagen de los pulmones segmentados
+    return img_segmentada
 
 def leer_dicom(directorio):
     reader = sitk.ImageSeriesReader()
     dicom_names = reader.GetGDCMSeriesFileNames(directorio)
     reader.SetFileNames(dicom_names)
     image = reader.Execute()
+    img_re = sitk.RescaleIntensity(image, -1024, 3071)
 
-    return image
+    return img_re
 
 def mostrar_slice(image_sitk):
     img = sitk.GetArrayFromImage(image_sitk)
@@ -66,3 +54,5 @@ def mostrar_slice(image_sitk):
     print(new_array.shape)
     plt.imshow(new_array[:, :, new_array.shape[2]//2], cmap="gray")
     plt.show()
+
+
