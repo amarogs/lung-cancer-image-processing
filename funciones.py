@@ -1,3 +1,7 @@
+import SimpleITK as sitk
+import numpy as np
+import matplotlib.pyplot as plt
+
 import skimage
 import pydicom
 import os
@@ -7,8 +11,8 @@ import scipy.ndimage
 from skimage import morphology
 from skimage import measure
 from skimage.transform import resize
-from sklearn.cluster import KMeans
-from plotly import _version_
+
+
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 from plotly.tools import FigureFactory as FF
 from plotly.graph_objs import *
