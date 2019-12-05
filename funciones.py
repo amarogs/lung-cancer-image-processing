@@ -51,8 +51,17 @@ def mostrar_slice(image_sitk):
     new_array = np.array(np.swapaxes(img, 0, 2))
     new_array = np.array(np.swapaxes(new_array, 0, 1))
     
-    print(new_array.shape)
-    plt.imshow(new_array[:, :, new_array.shape[2]//2], cmap="gray")
+    #plt.imshow(new_array[:, :, new_array.shape[2]//2], cmap="gray")
+    plt.imshow(new_array[new_array.shape[0]//2, :, :], cmap="gray")
+    
     plt.show()
 
 
+def obtener_array(imagen_sitk):
+    """Dada una imagen itk la transformamos a np array y colocamos
+    las componentes de manera adecuada. """
+    img = sitk.GetArrayFromImage(imagen_sitk)
+    new_array = np.array(np.swapaxes(img, 0, 2))
+    new_array = np.array(np.swapaxes(new_array, 0, 1))
+
+    return new_array
