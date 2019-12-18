@@ -20,6 +20,35 @@ from plotly.graph_objs import *
 
 
 
+def extraer_caracteristicas(img, img_ws):
+    """Dada una imagen de sitk y su segmentación de watershed, extrae cada una de las  """
+
+    img_arr = sitk.GetArrayFromImage(img)
+    ws_arr = sitk.GetArrayFromImage(img_ws)
+
+    stats = sitk.LabelShapeStatisticsImageFilter()
+    stats.Execute(img_ws)
+
+    for label in stats.GetLabels():
+        roundness = stats.GetRoundness(label)
+        if roundness < 8.3*(10**4):
+            elongation = stats.GetElongation(label)
+            if elongation < 6.8*(10**4):
+                region = extraer_etiqueta(img_arr, ws_arr, label)
+                energy = calcular_energia(region)
+
+
+def extraer_etiqueta(img, img_ws, label):
+    """Recibe la imagen original como array, la imagen de watershed como array y 
+    una etiqueta para extraer esa región de watershed de la imagen """
+
+    mask = (1/label)*(img_ws == label)
+    img = img + 1024
+    img = img*mask
+    img = img - 1024
+
+    return img
+
 
 def lung_segmentation(img_original, seedList):
     """Este método recibe una array N-dimensional con valores de intensidad en 

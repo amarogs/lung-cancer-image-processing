@@ -4,8 +4,7 @@ import SimpleITK as sitk
 import pandas as pd
 import funciones
 import pydicom
-import vtk
-import volume_rendering
+import radiomics as rad
 
 #Leemos la imagen en formato itk
 img = funciones.leer_dicom("./database/0/")
@@ -25,32 +24,8 @@ img = funciones.lung_segmentation(img, seeds)
 # img = sitk.MorphologicalWatershed(sitk.GradientMagnitude(img), markWatershedLine=True, level=10)
 # funciones.mostrar_slice(ws)
 
-# stats = sitk.LabelShapeStatisticsImageFilter()
-# stats.Execute(sitk.ConnectedComponent(ws))
 
-# stats_list = [ (stats.GetPhysicalSize(i),
-#                stats.GetElongation(i),
-#                stats.GetFlatness(i),
-#                stats.GetOrientedBoundingBoxSize(i)[0],
-#                stats.GetOrientedBoundingBoxSize(i)[2]) for i in stats.GetLabels()]
-
-# cols = ["Volume (nm^3)",
-#         "Elongation",
-#         "Flatness",
-#         "Oriented Bounding Box Minimum Size(nm)",
-#         "Oriented Bounding Box Maximum Size(nm)"]
-
-# stats = pd.DataFrame(
-#     data=stats_list, index=stats.GetLabels(), columns=cols)
-
-# stats
-
-
-#El thikness en este caso es 3 y spacing= 0,781
-
-# imgs_after_resamp, spacing = funciones.resample(
-#     img, [img.GetDimension()], [1, 1, 1])
-
-img_arr = sitk.GetArrayFromImage(img)
-v, f = funciones.make_mesh(img_arr, -1000)
-funciones.plotly_3d(v, f)
+extractor = rad.featureextractor.RadiomicsFeatureExtractor()
+extractor.disableAllFeatures()
+all_features = {firstorder: ['10Percentile']}
+extractor.enableFeaturesByName()
