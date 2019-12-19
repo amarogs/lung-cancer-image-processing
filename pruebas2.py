@@ -8,18 +8,17 @@ import radiomics as rad
 import six as six
 import copy as copy
 #Leemos la imagen en formato itk
-img = funciones.leer_dicom("./database/0/")
+img = funciones.leer_dicom("./QIN LUNG CT/QIN-LSC-0009/11-06-2014-1-CT Thorax wCont-24434/7-RENAL VEN.  3.0  B30f-45454")
 
-# funciones.mostrar_slice(img_re)
 # funciones.mostrar_slice(img)
 
 # Habría que meterlo con la aplicación
-seeds = [(100, 250, 30 ),(350, 350, 30) ]
+seeds = [(100, 250, 65 ),(350, 350, 65) ]
 [img.GetPixel(s) for s in seeds]
 
 img = funciones.lung_segmentation(img, seeds)
 # count = np.sum(sitk.GetArrayFromImage(img_binaria))
-# funciones.mostrar_slice(img_binaria)
+
 # funciones.mostrar_slice(img)
 
 ws = sitk.MorphologicalWatershed(img, markWatershedLine=True, level=20, fullyConnected=False)
@@ -94,5 +93,12 @@ reg = funciones.extraer_etiqueta(sitk.GetArrayFromImage(img), sitk.GetArrayFromI
 funciones.mostrar_slice(sitk.GetImageFromArray(reg))
 
 
-verts, faces = funciones.make_mesh(reg, -900)
+verts, faces = funciones.make_mesh(reg)
 funciones.plotly_3d(verts, faces)
+
+ruta = "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/1000-QIN CT challenge alg01 run01segmentation/000000.dcm"
+una_imagen = funciones.leer_una_imagen(ruta)
+funciones.mostrar_slice(una_imagen)
+
+
+info = pd.read_csv('./FeaturesWithLabels.csv')

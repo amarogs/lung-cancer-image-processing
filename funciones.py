@@ -50,6 +50,7 @@ def extraer_etiqueta(img, img_ws, label):
     return img
 
 
+
 def lung_segmentation(img_original, seedList):
     """Este método recibe una array N-dimensional con valores de intensidad en 
     escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
@@ -80,7 +81,13 @@ def lung_segmentation(img_original, seedList):
     # Devolvemos la imagen de los pulmones segmentados
     return img_segmentada
 
+def leer_una_imagen(ruta_imagen):
+    """Dada la ruta de una imagen, la carga como imagen de sitk """
+
+    return sitk.ReadImage(ruta_imagen)
+
 def leer_dicom(directorio):
+    """Dado un directorio, lee toda la serie dicom de un TAC """
     reader = sitk.ImageSeriesReader()
     dicom_names = reader.GetGDCMSeriesFileNames(directorio)
     reader.SetFileNames(dicom_names)
@@ -89,8 +96,12 @@ def leer_dicom(directorio):
 
     return img_re
 
-def mostrar_slice(image_sitk):
-    img = sitk.GetArrayFromImage(image_sitk)
+def mostrar_slice(image):
+    if  not isinstance(image, np.ndarray()):
+        img = sitk.GetArrayFromImage(image)
+    else:
+        img = image
+
     print("El min {} el max {}".format(np.min(img), np.max(img)))
     print(img.shape)
     
@@ -113,6 +124,7 @@ def obtener_array(imagen_sitk):
     return new_array
 
 #De aqui hacia abajotodo lo nuevo para dibujar
+
 
 
 def resample(image, dim,  new_spacing=[1, 1, 1]):
@@ -182,11 +194,4 @@ def plt_3d(verts, faces):
     plt.show()
 
 
-def obtener_array(imagen_sitk):
-    """Dada una imagen itk la transformamos a np array y colocamos
-    las componentes de manera adecuada. """
-    img = sitk.GetArrayFromImage(imagen_sitk)
-    new_array = np.array(np.swapaxes(img, 0, 2))
-    new_array = np.array(np.swapaxes(new_array, 0, 1))
 
-    return new_array
