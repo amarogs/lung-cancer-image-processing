@@ -133,13 +133,13 @@ def resample(image, dim,  new_spacing=[1, 1, 1]):
     return image, new_spacing
 
 
-def make_mesh(image, threshold=-600, step_size=1):
+def make_mesh(image, level=None, step_size=1):
     print("Transposing surface")
     p = image.transpose(2, 1, 0)
 
     print("Calculating surface")
     verts, faces, norm, val = measure.marching_cubes_lewiner(
-        p, threshold, step_size=step_size, allow_degenerate=True)
+        p, level, step_size=step_size, allow_degenerate=True)
     return verts, faces
 
 
