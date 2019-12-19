@@ -1,0 +1,11 @@
+Immagenes en pyqt -> https://pythonspot.com/pyqt5-image/
+
+seleccionar un punto -> https://stackoverflow.com/questions/3504522/pyqt-get-pixel-position-and-value-when-mouse-click-on-the-image
+
+QTDesigner -> https://medium.com/@hektorprofe/primeros-pasos-en-pyqt-5-y-qt-designer-programas-gr%C3%A1ficos-con-python-6161fba46060
+
+Multiplicar imagenes sitk-> https://itk.org/ITKExamples/src/Filtering/ImageIntensity/MultiplyTwoImages/Documentation.html
+
+Watershed -> http://simpleitk.github.io/SimpleITK-Notebooks/32_Watersheds_Segmentation.html
+
+Imagen en 3d: -> https://www.raddq.com/dicom-processing-segmentation-visualization-in-python/
