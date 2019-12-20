@@ -1,0 +1,19 @@
+Queremos una función ue nos devuelva los paramtetros para que odamos dar una lista de nodulos. Entre esos parametros estan
+el numero de caracteristicas que deben estar dentro de la desviacion tipica y el nivel de watershed.
+
+niveles watershed[10,20,30,40,50,60]
+
+list_sol
+funcion ()
+    aceptados a tramite =
+ paciente = pac1
+ pac1 -> watershed de los pulmones con nivel n
+ filtramos las etiquetas con menos de tres niveles
+ for region in watershed:
+    cars = caractersticas de region
+    si cumple la caracteristica aceptamos a tramite este water
+ si los aceptados a tramites es menor  que 7 aceptamos nivel de water
+ si esta el hij puta lo guardamos -> nivel de water, paciente y numero de nodulos
+ probamos con el siguiente nivel
+ fin bucle
+ lo mismo el resto de pacientes
