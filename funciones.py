@@ -88,7 +88,6 @@ def leer_una_imagen(directorio):
     for fname in os.listdir(directorio):
 
         if fname[-3::] == "dcm":
-            print("loading: {}".format(directorio+"/"+fname))
             files.append(pydicom.read_file(directorio+"/"+fname))
 
     return files[0].pixel_array
