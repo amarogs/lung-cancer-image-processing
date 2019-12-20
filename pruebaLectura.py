@@ -9,7 +9,7 @@ import os
 
 # load the DICOM files
 files = []
-directorio = "./database/0/"
+directorio  = "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/1000-QIN CT challenge alg02 run3segmentation result-58041"
 for fname in os.listdir(directorio):
 
     if fname[-3::] == "dcm":

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import skimage
-import pydicom
+import pydicom as pydicom
 import os
 from glob import glob
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
@@ -81,10 +81,17 @@ def lung_segmentation(img_original, seedList):
     # Devolvemos la imagen de los pulmones segmentados
     return img_segmentada
 
-def leer_una_imagen(ruta_imagen):
-    """Dada la ruta de una imagen, la carga como imagen de sitk """
+def leer_una_imagen(directorio):
+    """Dada el directorio de una imagen, la carga como imagen de numpy """
 
-    return sitk.ReadImage(ruta_imagen)
+    files = []
+    for fname in os.listdir(directorio):
+
+        if fname[-3::] == "dcm":
+            print("loading: {}".format(directorio+"/"+fname))
+            files.append(pydicom.read_file(directorio+"/"+fname))
+
+    return files[0].pixel_array
 
 def leer_dicom(directorio):
     """Dado un directorio, lee toda la serie dicom de un TAC """
@@ -97,7 +104,7 @@ def leer_dicom(directorio):
     return img_re
 
 def mostrar_slice(image):
-    if  not isinstance(image, np.ndarray()):
+    if  not isinstance(image, np.ndarray):
         img = sitk.GetArrayFromImage(image)
     else:
         img = image
