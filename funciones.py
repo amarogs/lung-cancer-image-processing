@@ -50,6 +50,35 @@ def extraer_etiqueta(img, img_ws, label):
     return img
 
 
+def obtener_semilla_automatica(img):
+    img_arr = sitk.GetArrayFromImage(img)
+    new_array = np.array(np.swapaxes(img, 0, 2))
+    new_array = np.array(np.swapaxes(new_array, 0, 1))
+    X, Y, Z = new_array.shape
+    seeds = []
+
+
+    #Primera semilla
+    x, y, z = (X//2, Y//5, Z//2)
+    s = (x, y, z)
+
+    valor = img.GetPixel(s)
+    while valor > -200 or valor < -1024:
+        s = (x, y+Y//20, z)
+        valor = img.GetPixel(s)
+    seeds.append(s)
+
+    #Segunda semilla
+    x, y, z= (x, 4*Y//5, Z//2)
+    s = (x, y, z)
+
+    valor = img.GetPixel(s)
+    while valor > -200 or valor < -1024:
+        s = (x, y-Y//20, z)
+        valor = img.GetPixel(s)
+    seeds.append(s)
+
+    return seeds
 
 def lung_segmentation(img_original, seedList):
     """Este método recibe una array N-dimensional con valores de intensidad en 

@@ -99,8 +99,8 @@ reg = funciones.extraer_etiqueta(sitk.GetArrayFromImage(img), sitk.GetArrayFromI
 funciones.mostrar_slice(sitk.GetImageFromArray(reg))
 
 
-verts, faces = funciones.make_mesh(reg)
-funciones.plotly_3d(verts, faces)
+verts, faces = funciones.make_mesh(reg,-200)
+funciones.plotly_3d(verts, faces,)
 
 ruta = "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/1000-QIN CT challenge alg02 run3segmentation result-58041/000000.dcm"
 una_imagen = funciones.leer_una_imagen(ruta)
