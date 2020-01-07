@@ -7,6 +7,7 @@ import pydicom
 import radiomics as rad
 import six as six
 import copy as copy
+
 #Leemos la imagen en formato itk
 img = funciones.leer_dicom(
     "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/2-THORAX W  3.0  B41 Soft Tissue-71225")
@@ -15,7 +16,7 @@ img_nodulo = funciones.leer_una_imagen("./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-
 img_nodulo = sitk.GetImageFromArray(img_nodulo)
 img_nodulo.CopyInformation(img)
 
-# funciones.mostrar_slice(img)
+# funciones.mostrar_slice(img) 
 
 # Habría que meterlo con la aplicación
 seeds = [(100, 250, 65 ),(350, 350, 65) ]
@@ -77,7 +78,10 @@ def calcula_dimensiones(img, ws):
         if ndims >= 3:
             labels.append(i)
 
+
     return labels
+
+
 
 def prueba_dimensiones(img):
     level = 10
