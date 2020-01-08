@@ -12,7 +12,9 @@ import copy as copy
 img = funciones.leer_dicom(
     "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/2-THORAX W  3.0  B41 Soft Tissue-71225")
 
-img_nodulo = funciones.leer_una_imagen("./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/1000-QIN CT challenge alg01 run02segmentation result-72120")
+
+img_nodulo = funciones.leer_una_imagen(
+    "./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/1000-QIN CT challenge alg01 run01segmentation")
 img_nodulo = sitk.GetImageFromArray(img_nodulo)
 img_nodulo.CopyInformation(img)
 

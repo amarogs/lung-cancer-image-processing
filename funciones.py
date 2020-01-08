@@ -20,34 +20,6 @@ from plotly.graph_objs import *
 
 
 
-def extraer_caracteristicas(img, img_ws):
-    """Dada una imagen de sitk y su segmentación de watershed, extrae cada una de las  """
-
-    img_arr = sitk.GetArrayFromImage(img)
-    ws_arr = sitk.GetArrayFromImage(img_ws)
-
-    stats = sitk.LabelShapeStatisticsImageFilter()
-    stats.Execute(img_ws)
-
-    for label in stats.GetLabels():
-        roundness = stats.GetRoundness(label)
-        if roundness < 8.3*(10**4):
-            elongation = stats.GetElongation(label)
-            if elongation < 6.8*(10**4):
-                region = extraer_etiqueta(img_arr, ws_arr, label)
-                energy = calcular_energia(region)
-
-
-def extraer_etiqueta(img, img_ws, label):
-    """Recibe la imagen original como array, la imagen de watershed como array y 
-    una etiqueta para extraer esa región de watershed de la imagen """
-
-    mask = (1/label)*(img_ws == label)
-    img = img + 1024
-    img = img*mask
-    img = img - 1024
-
-    return img
 
 
 def obtener_semilla_automatica(img):
@@ -131,7 +103,7 @@ def leer_dicom(directorio):
 
     return img_re
 
-def mostrar_slice(image):
+def mostrar_slice(image, n_slice=None):
     if  not isinstance(image, np.ndarray):
         img = sitk.GetArrayFromImage(image)
     else:
@@ -142,8 +114,11 @@ def mostrar_slice(image):
     
     new_array = np.array(np.swapaxes(img, 0, 2))
     new_array = np.array(np.swapaxes(new_array, 0, 1))
-    
-    plt.imshow(new_array[:, :, new_array.shape[2]//2], cmap="gray")
+
+    if n_slice == None:
+        n_slice = new_array.shape[2]//2
+        
+    plt.imshow(new_array[:, :, n_slice], cmap="gray")
     #plt.imshow(new_array[new_array.shape[0]//2, :, :], cmap="gray")
     
     plt.show()
@@ -229,4 +204,53 @@ def plt_3d(verts, faces):
     plt.show()
 
 
+def myshow(img, title=None, margin=0.05, dpi=80):
+    nda = sitk.GetArrayViewFromImage(img)
+    spacing = img.GetSpacing()
 
+    if nda.ndim == 3:
+        # fastest dim, either component or x
+        c = nda.shape[-1]
+
+        # the the number of components is 3 or 4 consider it an RGB image
+        if not c in (3, 4):
+            nda = nda[nda.shape[0]//2, :, :]
+
+    elif nda.ndim == 4:
+        c = nda.shape[-1]
+
+        if not c in (3, 4):
+            raise Runtime("Unable to show 3D-vector Image")
+
+        # take a z-slice
+        nda = nda[nda.shape[0]//2, :, :, :]
+
+    ysize = nda.shape[0]
+    xsize = nda.shape[1]
+
+    # Make a figure big enough to accommodate an axis of xpixels by ypixels
+    # as well as the ticklabels, etc...
+    figsize = (1 + margin) * ysize / dpi, (1 + margin) * xsize / dpi
+
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    # Make the axis the right size...
+    ax = fig.add_axes([margin, margin, 1 - 2*margin, 1 - 2*margin])
+
+    extent = (0, xsize*spacing[1], ysize*spacing[0], 0)
+
+    t = ax.imshow(nda, extent=extent, interpolation=None)
+
+    if nda.ndim == 2:
+        t.set_cmap("gray")
+
+    if(title):
+        plt.title(title)
+
+def overlay(pulmones_sitk, mascara_sitk, n_slice):
+    pulmones_array = obtener_array(pulmones_sitk)
+    mascara_array = obtener_array(mascara_sitk)
+
+    plt.imshow(pulmones_array[:,:,n_slice], cmap="gray")
+    plt.imshow(mascara_array[:, :, n_slice], cmap="Reds", alpha=0.5)
+
+    plt.show()

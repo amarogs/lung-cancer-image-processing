@@ -93,7 +93,7 @@ def caracteristicas_nodulo(img_paciente, mascara,region ,id_paciente, id_prueba=
     return (id_paciente,id_prueba,sphericity, elongation, energy)
 
 
-def datos_estadisticos_nodulo(listado_dir_imagenes, archivo_salida):
+def obtencion_tablas_datos_nodulo(listado_dir_imagenes, archivo_salida):
     """Recibe la imagen de un paciente y la lista de máscaras del nódulo para extraer datos
     estadisticos que se guardan en la lista global DATOS. """
 
@@ -219,6 +219,7 @@ def obtencion_semilla_ws(nodulo):
     return semilla
 
 
+
 def experimenta_paciente(args):
     """Dado una carpeta con los datos del paciente una lista de niveles, realiza esos
     niveles de watershed para devolver un conjunto con los niveles que han sido fructíferos.
@@ -246,7 +247,6 @@ def experimenta_paciente(args):
     niveles_paciente = set()
     
     
-
     for nivel in niveles_ws:
         #Realizmos el watershed
         ws = sitk.MorphologicalWatershed(gradiente, markWatershedLine=True, level=nivel)
@@ -257,7 +257,6 @@ def experimenta_paciente(args):
             niveles_paciente.add(nivel)
     print("Completado el paciente ", id_paciente)
     return niveles_paciente
-
 def experimentacion_watershed_2(listado_dir_imagenes, niveles_ws):
     niveles_watershed = []
     niveles_por_paciente = {}
@@ -296,12 +295,46 @@ def experimentacion_watershed_2(listado_dir_imagenes, niveles_ws):
     return niveles_por_paciente
 
 
+def extraer_mascara(ws, region):
+    ws_array = sitk.GetArrayFromImage(ws)
+
+    mask = (1/region)*(ws_array == region)
+
+    return sitk.GetImageFromArray(mask)
+
+
+def extraer_region_interes(segmentacion_pulmones, nodulo, nivel, id_paciente):
+
+    #Obtenemos el nodulo 0 del paciente
+    nodulo = sitk.Cast(nodulo, sitk.sitkUInt32)
+    #Realizamos ws
+    ws = sitk.MorphologicalWatershed(sitk.GradientMagnitude(segmentacion_pulmones), markWatershedLine=True, level=nivel)
+    #Obtenemos la region con más de un 60% del cancer y como mucho un 10% más grande
+    region = comprobar_existencia_nodulo(ws, nodulo, segmentacion_pulmones)
+    
+    print("He encontrado una region {} ".format(region))
+    caracteristicas = caracteristicas_nodulo(segmentacion_pulmones, ws, region, id_paciente)
+
+    esfericidad, elongacion, energia = caracteristicas[2], caracteristicas[3], caracteristicas[4]
+    if esfericidad > UMBRAL_ESFERICIDAD and elongacion > UMBRAL_ELONGACION and energia > UMBRAL_ENERGIA:
+        print("La region {} cumple los criterios".format(region))
+    else:
+        print("La region {} no lo cumple".format(region))
+
 def obtener_nivel_global(niveles_por_paciente):
     nivel = niveles_por_paciente[0]
     for i in range(1,len(niveles_por_paciente)):
         nivel = nivel.intersection(niveles_por_paciente[i])
     return nivel
-
+def obtener_nivel_explicado():
+    niveles = pickle.load(open("niveles.p", "rb"))
+    niveles_no_vacios = []
+    for (i, set_niveles) in enumerate(niveles):
+        if len(set_niveles) == 0:
+            print("No se han encontrado niveles para el paciente ", i)
+        else:
+            niveles_no_vacios.append(set_niveles)
+    print("Los pacientes con niveles válidos de watershed tienen en común: {}".format(set.intersection(*niveles_no_vacios)))
 #Para el paciente 0. El nivel 26 funciona.
 
 #Lista de lista donde cada elemento son rutas a información de un paciente
@@ -309,8 +342,7 @@ listado_dir_imagenes = listado_directorio_imagenes()
 #niveles_por_paciente = experimentacion_watershed_2(listado_dir_imagenes,[1])
 
 
-
-#datos_estadisticos_nodulo(listado_dir_imagenes, "prueba")
+#obtencion_tablas_datos_nodulo(listado_dir_imagenes, "prueba")
 
 
 
