@@ -56,11 +56,11 @@ def lung_segmentation(img_original, seedList):
     """Este método recibe una array N-dimensional con valores de intensidad en 
     escala HU (imagen) y dos puntos (x,y,z) que son las semillas del crecimiento de regiones"""
 
-    # Aplicamos el filtro de suavizado Curvature Flow
-    img = sitk.CurvatureFlow(image1=img_original, timeStep=0.125, numberOfIterations=5)
-
+    # Aplicamos el filtro de suavizado gaussiano
+    img = sitk.DiscreteGaussian(img_original, 10)
     # Obtenemos el crecimiento de regiones partiendo de la lista de semillas
     # El resultado es una imagen binarizada.
+    
     img = sitk.ConnectedThreshold(img, seedList, lower=-1000.0, upper=-200.0)
 
     # Realizamos un cierre morfológico para unir pequeñas regiones separadas
@@ -111,7 +111,8 @@ def mostrar_slice(image, n_slice=None):
 
     print("El min {} el max {}".format(np.min(img), np.max(img)))
     print(img.shape)
-    
+    #Para encontrar el nodulo mostrar aquellas slices que tengan
+    #un valor maximo mayor que 0
     new_array = np.array(np.swapaxes(img, 0, 2))
     new_array = np.array(np.swapaxes(new_array, 0, 1))
 
