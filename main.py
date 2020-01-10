@@ -22,6 +22,7 @@ direcciones_de_pacientes = ["./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax w
 
 
 def escoge_paciente(paciente):
+    
     return direcciones_de_pacientes[paciente]
 
 
@@ -38,6 +39,7 @@ def leer_directorio_usuario(direc_paciente):
 def segmentacion_pulmones(paciente_sitk, semillas):
     """Modifica la variable global pulmones_sitk. """
     pulmones_sitk = funciones.lung_segmentation(paciente_sitk,semillas)
+    pulmones_array = funciones.obtener_array(pulmones_sitk)
     pass
 
 def realizar_watershed(pulmones_sitk, nivel=29):
@@ -68,18 +70,4 @@ def extraer_etiqueta():
     pass
 
 def devuelve_array(slice): #Fubcion que utilizamos para imprimir slices del DICOM, aquí solo las devolvemos
-
-    if not isinstance(paciente_array, np.ndarray):
-        img = sitk.GetArrayFromImage(paciente_array)
-    else:
-        img = paciente_array
-
-    # Para encontrar el nodulo mostrar aquellas slices que tengan
-    # un valor maximo mayor que 0
-    new_array = np.array(np.swapaxes(img, 0, 2))
-    new_array = np.array(np.swapaxes(new_array, 0, 1))
-
-    if slice == None:
-        slice = new_array.shape[2] // 2
-
-    return new_array[:, :, slice]
+    return paciente_array[:,:,slice]
