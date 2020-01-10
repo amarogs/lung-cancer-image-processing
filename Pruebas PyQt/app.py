@@ -5,19 +5,30 @@ Created on Tue Nov 26 17:44:36 2019
 @author: Quique
 """
 
-from ventana_ui import *
+from principal_ui import *
 from PyQt5.QtGui import QPixmap,QImage,QColor
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget 
 
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
     def __init__(self, *args, **kwargs):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
-        self.label.setText("Haz clic en el botón")
-        self.pushButton.setText("Presióname")
-        self.pushButton.clicked.connect(self.imagen)
+        self.buttons_acepta_segmentacion.setVisible(False)
+        self.slider_slices.valueChanged.connect(self.valor_slider)
+        self.comboBox.addItems(["Paciente 1","Paciente 2","Paciente 3","Paciente 4","Paciente 5","Paciente 6","Paciente 7","Paciente 8"])
+        self.comboBox.activated.connect(self.impresion)
+
+
+        #self.slider_slices.setValue()
+        #self.label.setText("Haz clic en el botón")
+        #self.pushButton.setText("Presióname")
+        #self.pushButton.clicked.connect(self.imagen)
         
-        
+    def impresion(self):
+        self.label_instrucciones.setText("El paciente es: " + str(self.comboBox.currentIndex()))
+    def valor_slider(self):
+        self.label_val_slider.setText(str(self.slider_slices.value()))
+
     def actualizar(self):
         self.label.setText("¡Acabas de hacer clic en el botón!")
     
