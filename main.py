@@ -11,7 +11,7 @@ nodulo_sitk = None #Mascara del nodulo cancerigeno en sitk
 pulmones_sitk = None #Imagen con los pulmones segementados en sitk
 ws_sitk = None #Imagen con las diferentes regiones etiquetadas
 region_cancer = None
-direcciones_de_pacientes = ["./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/2-THORAX W  3.0  B41 Soft Tissue-71225",
+direcciones_de_pacientes = ["./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax wContrast-41946/",
                             "./QIN LUNG CT/QIN-LSC-0014/11-06-2014-1-CT Thorax wContrast-34336/2-THORAX W  3.0  B41 Soft Tissue-85906",
                             "./QIN LUNG CT/QIN-LSC-0028/11-06-2014-1-CT Thorax wContrast-24475/2-THORAXW 3.0 B41 Soft Tissue-16822",
                             "./QIN LUNG CT/QIN-LSC-0049/11-06-2014-1-CT Thorax wContrast-14304/2-THORAX W  3.0  B41 Soft Tissue-57047",
@@ -22,14 +22,15 @@ direcciones_de_pacientes = ["./QIN LUNG CT/QIN-LSC-0003/04-01-2015-1-CT Thorax w
 
 
 def escoge_paciente(paciente):
-    return direcciones_de_pacientes[paciente]
+    dir = experimentacion.busca_carpetas(direcciones_de_pacientes[paciente])
+
+    return [ direcciones_de_pacientes[paciente] + "/" + nombre for nombre in dir]
 
 
 def leer_directorio_usuario(direc_paciente):
 
     """directorio_paciente es una String con la ruta a la carpeta principal del 
     paciente QIN... Modifica las variables globales de paciente_sitk"""
-
     paciente_sitk, nodulo_sitk = experimentacion.leer_paciente(direc_paciente)
     paciente_array = funciones.obtener_array(paciente_sitk)
     nodulo_sitk = nodulo_sitk[0] #La funcion leer paciente devuelve una lista de nodulos y solo cogemos uno de ellos

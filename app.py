@@ -38,8 +38,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
         slice = self.slider_slices.value()
         slice_paciente = main.devuelve_array(slice)
         self.mplwidget.canvas.axes.clear()
-        self.mplwidget.canvas.axes.plot(slice_paciente)
-
+        self.mplwidget.canvas.axes.imshow(slice_paciente)
         self.mplwidget.canvas.draw()
     
     def getPixel(self, event):
