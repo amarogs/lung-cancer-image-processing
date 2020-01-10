@@ -106,15 +106,15 @@ def leer_dicom(directorio):
 def mostrar_slice(image, n_slice=None):
     if  not isinstance(image, np.ndarray):
         img = sitk.GetArrayFromImage(image)
-    else:
-        img = image
+        new_array = np.array(np.swapaxes(img, 0, 2))
+        new_array = np.array(np.swapaxes(new_array, 0, 1))
 
-    print("El min {} el max {}".format(np.min(img), np.max(img)))
-    print(img.shape)
+    else:
+        new_array = image
+
+
     #Para encontrar el nodulo mostrar aquellas slices que tengan
     #un valor maximo mayor que 0
-    new_array = np.array(np.swapaxes(img, 0, 2))
-    new_array = np.array(np.swapaxes(new_array, 0, 1))
 
     if n_slice == None:
         n_slice = new_array.shape[2]//2

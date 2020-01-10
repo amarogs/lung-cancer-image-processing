@@ -25,6 +25,30 @@ seeds = [(100, 250, 65 ),(350, 350, 65) ]
 [img.GetPixel(s) for s in seeds]
 
 img = funciones.lung_segmentation(img, seeds)
+
+
+
+def obterner_array_overlay(pulmones_sitk, nodulo_sitk, opacity):
+    #El nodulo_sitk es una mascara del nodulo cancerigeno, 
+
+    overlay = sitk.LabelOverlay(pulmones_sitk, nodulo_sitk, opacity=0.1)
+    overlay = sitk.Cast(sitk.RescaleIntensity(overlay), sitk.sitkUInt8)
+    
+    funciones.mostrar_slice(funciones.obtener_array(overlay), 89)
+
+def obtener_slice_nodulo(nodulo_sitk):
+    nodulo_array = funciones.obtener_array(nodulo_sitk)
+    pixeles_mayor, indice_mayor = 0, 0
+
+    for i in range(nodulo_array.shape[2]):
+        pixeles_actual = np.sum(nodulo_array[:,:,i])
+        if pixeles_actual > pixeles_mayor:
+            pixeles_mayor = pixeles_actual
+            indice_mayor = i
+        if pixeles_actual < pixeles_mayor:
+            break
+
+    return indice_mayor
 # count = np.sum(sitk.GetArrayFromImage(img_binaria))
 
 # funciones.mostrar_slice(img)
