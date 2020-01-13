@@ -247,11 +247,11 @@ def myshow(img, title=None, margin=0.05, dpi=80):
     if(title):
         plt.title(title)
 
-def overlay(pulmones_sitk, mascara_sitk, n_slice):
-    pulmones_array = obtener_array(pulmones_sitk)
-    mascara_array = obtener_array(mascara_sitk)
 
-    plt.imshow(pulmones_array[:,:,n_slice], cmap="gray")
-    plt.imshow(mascara_array[:, :, n_slice], cmap="Reds", alpha=0.5)
+def obterner_array_overlay(pulmones_sitk, nodulo_sitk):
+    """pulmones_sitk es la segmentación de los pulmones, nodulo_sitk es una
+    mascara del nodulo cancerigeno """
+    overlay = sitk.LabelOverlay(
+        pulmones_sitk, nodulo_sitk, opacity=0.1, backgroundValue=0)
 
-    plt.show()
+    return funciones.obtener_array(overlay)
