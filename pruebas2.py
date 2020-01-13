@@ -28,13 +28,8 @@ img = funciones.lung_segmentation(img, seeds)
 
 
 
-def obterner_array_overlay(pulmones_sitk, nodulo_sitk, opacity):
-    #El nodulo_sitk es una mascara del nodulo cancerigeno, 
 
-    overlay = sitk.LabelOverlay(pulmones_sitk, nodulo_sitk, opacity=0.1)
-    overlay = sitk.Cast(sitk.RescaleIntensity(overlay), sitk.sitkUInt8)
     
-    funciones.mostrar_slice(funciones.obtener_array(overlay), 89)
 
 def obtener_slice_nodulo(nodulo_sitk):
     nodulo_array = funciones.obtener_array(nodulo_sitk)

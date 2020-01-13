@@ -29,7 +29,7 @@ def escoge_paciente(paciente):
 
 
 def leer_directorio_usuario(direc_paciente):
-
+    
     """directorio_paciente es una String con la ruta a la carpeta principal del 
     paciente QIN... Modifica las variables globales de paciente_sitk"""
     paciente_sitk, nodulo_sitk = experimentacion.leer_paciente(direc_paciente)
@@ -70,5 +70,6 @@ def extraer_etiqueta():
     region_cancer = experimentacion.comprobar_existencia_nodulo(ws_sitk, nodulo_sitk, pulmones_sitk)
     pass
 
-def devuelve_array(slice): #Fubcion que utilizamos para imprimir slices del DICOM, aquí solo las devolvemos
+def devuelve_array(slice): 
+    """Devuelve un array de numpy de dos dimensiones """
     return paciente_array[:,:,slice]
