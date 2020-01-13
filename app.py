@@ -5,20 +5,39 @@ Created on Tue Nov 26 17:44:36 2019
 @author: Quique
 """
 
-from principal_ui import *
+from principal1_ui import *
+from mplwidget import *
+from PyQt5.QtWidgets import*
+
+
 from PyQt5.QtGui import QPixmap,QImage,QColor
 import main as main
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget 
+import funciones as fun
 
-class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
+class MainWindow(QMainWindow,mplWidget,Ui_LCDetection):
     def __init__(self, *args, **kwargs):
-        QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
+        QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
+        self.label_instrucciones.setText("Escoja el paciente con el desplegable de arriba " )
         self.buttons_acepta_segmentacion.setVisible(False)
+        #ocultando lo correspondiente a introducir las coordenadas
+        self.label_pulmon_derecho.setVisible(False)
+        self.label_pulmon_izquierdo.setVisible(False)
+        self.line_x_der.setVisible(False)
+        self.line_x_izq.setVisible(False)
+        self.line_y_izq.setVisible(False)
+        self.line_y_der.setVisible(False)
+        self.button_enviar_coordenadas.setVisible(False)
+        #inhabilitando el botón para introducir el slice a ver
+        self.button_slice.setEnabled(False)
         self.slider_slices.valueChanged.connect(self.valor_slider)
         self.comboBox.addItems(["Paciente 1","Paciente 2","Paciente 3","Paciente 4","Paciente 5","Paciente 6","Paciente 7","Paciente 8"])
         self.comboBox.activated.connect(self.inicio)
         self.button_slice.clicked.connect(self.dibujar_slice)
+        self.button_enviar_coordenadas.clicked.connect(self.segmentar_pulmon)
+        self.buttons_acepta_segmentacion.accepted.connect(self.aceptado)
+        self.buttons_acepta_segmentacion.rejected.connect(self.rechazado)
+        self.button_3d.clicked.connect(self.representacion_3d_pulmones)
 
 
         #self.slider_slices.setValue()
@@ -27,9 +46,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
         #self.pushButton.clicked.connect(self.imagen)
         
     def inicio(self):
-        #self.label_instrucciones.setText("El paciente es: " + str(self.comboBox.currentIndex()))
         dir = main.escoge_paciente(self.comboBox.currentIndex())
         main.leer_directorio_usuario(dir)
+        num_sliders= main.paciente_sitk.GetDepth()
+        self.slider_slices.setMaximum(num_sliders)
+        self.label_max_slice.setText(str(num_sliders))
+        self.button_slice.setEnabled(True)
+        main.representado= main.paciente_array
+        self.label_instrucciones.setText("Use el slider para seleccionar el slice que quiere visualizar del paciente y \n presione botón ok para visualizarlo")
+
 
     def valor_slider(self):
         self.label_val_slider.setText(str(self.slider_slices.value()))
@@ -37,10 +62,41 @@ class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
     def dibujar_slice(self):
         slice = self.slider_slices.value()
         slice_paciente = main.devuelve_array(slice)
-        self.mplwidget.canvas.axes.clear()
-        self.mplwidget.canvas.axes.imshow(slice_paciente)
-        self.mplwidget.canvas.draw()
-    
+        self.widget.canvas.axes.clear()
+        self.widget.canvas.axes.imshow(slice_paciente, cmap='gray')
+        self.widget.canvas.draw()
+        self.label_pulmon_derecho.setVisible(True)
+        self.label_pulmon_izquierdo.setVisible(True)
+        self.line_x_der.setVisible(True)
+        self.line_x_izq.setVisible(True)
+        self.line_y_izq.setVisible(True)
+        self.line_y_der.setVisible(True)
+        self.button_enviar_coordenadas.setVisible(True)
+        self.label_instrucciones.setText("Utilice los espacios habilitados debajo de la representación gráfica para introducir \n los puntos pertenecientes a los pulmones para así poder realizar la segmentación ")
+
+    def segmentar_pulmon(self):
+        slice= self.slider_slices.value()
+        semillas=[(int(self.line_x_izq.text()),int(self.line_y_izq.text()),slice),(int(self.line_x_der.text()),int(self.line_y_der.text()),slice)]
+        main.segmentacion_pulmones(main.paciente_sitk,semillas)
+        main.representado= main.pulmones_array
+        self.label_instrucciones.setText("Elige un slice para comprobar que esté bien hecha la segmentación\n de ser así responda a la pregunta abajo a la derecha")
+        self.buttons_acepta_segmentacion.setVisible(True)
+
+    def representacion_3d_pulmones(self):
+        verts,faces = fun.make_mesh(main.paciente_sitk)
+        fun.plotly_3d(verts,faces)
+
+    def aceptado(self):
+        pass
+
+    def rechazado(self):
+        pass
+
+
+
+
+
+    #Esto no va a hacer falta pero lo tengo aqui para acordarme de como se llamaba cada cosa
     def getPixel(self, event):
         x = event.pos().x()
         y = event.pos().y()
@@ -58,7 +114,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_LCDetection):
         
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
+    app = QApplication([])
     window = MainWindow()
     window.show()
     app.exec_()

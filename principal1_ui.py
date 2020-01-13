@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'principal.ui'
+# Form implementation generated from reading ui file 'ventana_pricipal.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -65,6 +65,27 @@ class Ui_LCDetection(object):
         self.label_val_slider.setGeometry(QtCore.QRect(510, 280, 20, 31))
         self.label_val_slider.setText("")
         self.label_val_slider.setObjectName("label_val_slider")
+        self.line_x_izq = QtWidgets.QLineEdit(LCDetection)
+        self.line_x_izq.setGeometry(QtCore.QRect(170, 500, 41, 20))
+        self.line_x_izq.setObjectName("line_x_izq")
+        self.line_y_izq = QtWidgets.QLineEdit(LCDetection)
+        self.line_y_izq.setGeometry(QtCore.QRect(170, 530, 41, 20))
+        self.line_y_izq.setObjectName("line_y_izq")
+        self.line_y_der = QtWidgets.QLineEdit(LCDetection)
+        self.line_y_der.setGeometry(QtCore.QRect(410, 530, 41, 20))
+        self.line_y_der.setObjectName("line_y_der")
+        self.line_x_der = QtWidgets.QLineEdit(LCDetection)
+        self.line_x_der.setGeometry(QtCore.QRect(410, 500, 41, 20))
+        self.line_x_der.setObjectName("line_x_der")
+        self.label_pulmon_izquierdo = QtWidgets.QLabel(LCDetection)
+        self.label_pulmon_izquierdo.setGeometry(QtCore.QRect(40, 490, 111, 61))
+        self.label_pulmon_izquierdo.setObjectName("label_pulmon_izquierdo")
+        self.label_pulmon_derecho = QtWidgets.QLabel(LCDetection)
+        self.label_pulmon_derecho.setGeometry(QtCore.QRect(260, 490, 111, 61))
+        self.label_pulmon_derecho.setObjectName("label_pulmon_derecho")
+        self.button_enviar_coordenadas = QtWidgets.QPushButton(LCDetection)
+        self.button_enviar_coordenadas.setGeometry(QtCore.QRect(470, 510, 75, 23))
+        self.button_enviar_coordenadas.setObjectName("button_enviar_coordenadas")
 
         self.retranslateUi(LCDetection)
         QtCore.QMetaObject.connectSlotsByName(LCDetection)
@@ -76,6 +97,13 @@ class Ui_LCDetection(object):
         self.button_slice.setText(_translate("LCDetection", "Ok"))
         self.button_3d.setText(_translate("LCDetection", "Ver en 3d"))
         self.label_min_slice.setText(_translate("LCDetection", "1"))
+        self.label_pulmon_izquierdo.setText(_translate("LCDetection", "Coordenadas\n"
+" x (arriba) e y (abajo) \n"
+" del pulmón izquierdo"))
+        self.label_pulmon_derecho.setText(_translate("LCDetection", "Coordenadas\n"
+" x (arriba) e y (abajo) \n"
+" del pulmón derecho"))
+        self.button_enviar_coordenadas.setText(_translate("LCDetection", "enviar"))
 
 from mplwidget import mplWidget
 
