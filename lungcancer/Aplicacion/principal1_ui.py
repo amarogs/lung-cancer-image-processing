@@ -6,7 +6,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+from lungcancer.Aplicacion.mplwidget import mplWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_LCDetection(object):
     def setupUi(self, LCDetection):
@@ -37,21 +39,26 @@ class Ui_LCDetection(object):
         self.button_3d.setGeometry(QtCore.QRect(640, 180, 191, 31))
         self.button_3d.setObjectName("button_3d")
         self.label_3d = QtWidgets.QLabel(LCDetection)
-        self.label_3d.setGeometry(QtCore.QRect(630, 250, 291, 191))
+        self.label_3d.setGeometry(QtCore.QRect(600, 250, 291, 191))
         self.label_3d.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_3d.setText("")
-        self.label_3d.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.label_3d.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.label_3d.setObjectName("label_3d")
-        self.buttons_acepta_segmentacion = QtWidgets.QDialogButtonBox(LCDetection)
-        self.buttons_acepta_segmentacion.setGeometry(QtCore.QRect(670, 480, 161, 31))
-        self.buttons_acepta_segmentacion.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.buttons_acepta_segmentacion.setObjectName("buttons_acepta_segmentacion")
+        self.buttons_acepta_segmentacion = QtWidgets.QDialogButtonBox(
+            LCDetection)
+        self.buttons_acepta_segmentacion.setGeometry(
+            QtCore.QRect(670, 480, 161, 31))
+        self.buttons_acepta_segmentacion.setStandardButtons(
+            QtWidgets.QDialogButtonBox.Cancel | QtWidgets.QDialogButtonBox.Ok)
+        self.buttons_acepta_segmentacion.setObjectName(
+            "buttons_acepta_segmentacion")
         self.label_segmentacion = QtWidgets.QLabel(LCDetection)
         self.label_segmentacion.setGeometry(QtCore.QRect(630, 460, 251, 16))
         self.label_segmentacion.setText("")
         self.label_segmentacion.setObjectName("label_segmentacion")
         self.label_slice_seleccionado = QtWidgets.QLabel(LCDetection)
-        self.label_slice_seleccionado.setGeometry(QtCore.QRect(200, 495, 111, 21))
+        self.label_slice_seleccionado.setGeometry(
+            QtCore.QRect(200, 495, 111, 21))
         self.label_slice_seleccionado.setText("")
         self.label_slice_seleccionado.setObjectName("label_slice_seleccionado")
         self.label_max_slice = QtWidgets.QLabel(LCDetection)
@@ -84,8 +91,20 @@ class Ui_LCDetection(object):
         self.label_pulmon_derecho.setGeometry(QtCore.QRect(260, 490, 111, 61))
         self.label_pulmon_derecho.setObjectName("label_pulmon_derecho")
         self.button_enviar_coordenadas = QtWidgets.QPushButton(LCDetection)
-        self.button_enviar_coordenadas.setGeometry(QtCore.QRect(470, 510, 75, 23))
-        self.button_enviar_coordenadas.setObjectName("button_enviar_coordenadas")
+        self.button_enviar_coordenadas.setGeometry(
+            QtCore.QRect(470, 510, 75, 23))
+        self.button_enviar_coordenadas.setObjectName(
+            "button_enviar_coordenadas")
+        self.label_resultado = QtWidgets.QLabel(LCDetection)
+        self.label_resultado.setGeometry(QtCore.QRect(40, 30, 721, 71))
+        self.label_resultado.setText("")
+        self.label_resultado.setObjectName("label_resultado")
+        self.label_resultado.setVisible(False)
+        #self.button_visualizacion = QtWidgets.QPushButton(LCDetection)
+        #self.button_visualizacion.setGeometry(QtCore.QRect(170, 110, 141, 23))
+        #self.button_visualizacion.setObjectName("button_visualizacion")
+        #self.button_visualizacion.setVisible(False)
+        self.map = 0
 
         self.retranslateUi(LCDetection)
         QtCore.QMetaObject.connectSlotsByName(LCDetection)
@@ -93,19 +112,23 @@ class Ui_LCDetection(object):
     def retranslateUi(self, LCDetection):
         _translate = QtCore.QCoreApplication.translate
         LCDetection.setWindowTitle(_translate("LCDetection", "LCDetection"))
-        self.labelpaciente.setText(_translate("LCDetection", "Seleccione paciente"))
+        self.labelpaciente.setText(_translate(
+            "LCDetection", "Seleccione paciente"))
         self.button_slice.setText(_translate("LCDetection", "Ok"))
         self.button_3d.setText(_translate("LCDetection", "Ver en 3d"))
         self.label_min_slice.setText(_translate("LCDetection", "1"))
         self.label_pulmon_izquierdo.setText(_translate("LCDetection", "Coordenadas\n"
-" x (arriba) e y (abajo) \n"
-" del pulmón izquierdo"))
+                                                       " X (arriba) e Y (abajo) \n"
+                                                       " del pulmón izquierdo"))
         self.label_pulmon_derecho.setText(_translate("LCDetection", "Coordenadas\n"
-" x (arriba) e y (abajo) \n"
-" del pulmón derecho"))
-        self.button_enviar_coordenadas.setText(_translate("LCDetection", "enviar"))
+                                                     " X (arriba) e Y (abajo) \n"
+                                                     " del pulmón derecho"))
+        self.button_enviar_coordenadas.setText(
+            _translate("LCDetection", "Segmentar"))
+        self.texto_boton = [
+            0, ["Ver solo el nódulo", "ver el nódulo en su entorno"]]
+        #self.button_visualizacion.setText(self.texto_boton[1][self.texto_boton[0]])
 
-from lungcancer.Aplicacion.mplwidget import mplWidget
 
 if __name__ == "__main__":
     import sys
@@ -115,4 +138,3 @@ if __name__ == "__main__":
     ui.setupUi(LCDetection)
     LCDetection.show()
     sys.exit(app.exec_())
-

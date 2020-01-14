@@ -21,24 +21,24 @@ def lung_segmentation(img_original, seedList):
     img = sitk.DiscreteGaussian(img_original, 10)
     # Obtenemos el crecimiento de regiones partiendo de la lista de semillas
     # El resultado es una imagen binarizada.
-    
+
     img = sitk.ConnectedThreshold(img, seedList, lower=-1000.0, upper=-200.0)
 
     # Realizamos un cierre morfológico para unir pequeñas regiones separadas
     img = sitk.BinaryMorphologicalClosing(img, 12, sitk.sitkBall)
 
     #Convertimos la imagen binaria en el mismo tipo que la imagen original
-    img= sitk.Cast(img, sitk.sitkInt16)
+    img = sitk.Cast(img, sitk.sitkInt16)
 
     #Como dentro de la escala HU etá incluido el 0, vamos a sumar 1024 para que al multiplicar, el menor valor de la nueva
     #escala sea 0
     img_original = img_original + 1024
 
     #Realizamos la segmentación de los pulmones
-    img_segmentada = sitk.Multiply(img,img_original)
+    img_segmentada = sitk.Multiply(img, img_original)
 
     #Reescalamos a HU
-    img_segmentada= img_segmentada-1024
+    img_segmentada = img_segmentada-1024
 
     # Devolvemos la imagen de los pulmones segmentados
     return img_segmentada
@@ -46,32 +46,7 @@ def lung_segmentation(img_original, seedList):
 
 
 
-def obtener_array(imagen_sitk):
-    """Dada una imagen itk la transformamos a np array y colocamos
-    las componentes de manera adecuada. """
-    img = sitk.GetArrayFromImage(imagen_sitk)
-    new_array = np.array(np.swapaxes(img, 0, 2))
-    new_array = np.array(np.swapaxes(new_array, 0, 1))
 
-    return new_array
-
-
-def obtener_slice_nodulo(nodulo_sitk):
-    nodulo_array = obtener_array(nodulo_sitk)
-    pixeles_mayor, indice_mayor = 0, 0
-
-    for i in range(nodulo_array.shape[2]):
-        pixeles_actual = np.sum(nodulo_array[:, :, i])
-        if pixeles_actual > pixeles_mayor:
-            pixeles_mayor = pixeles_actual
-            indice_mayor = i
-        if pixeles_actual < pixeles_mayor:
-            break
-
-    return indice_mayor
-
-
-"""Funciones para dibujar"""
 def mostrar_slice(image, n_slice=None):
     if not isinstance(image, np.ndarray):
         img = sitk.GetArrayFromImage(image)
@@ -91,6 +66,19 @@ def mostrar_slice(image, n_slice=None):
     #plt.imshow(new_array[new_array.shape[0]//2, :, :], cmap="gray")
 
     plt.show()
+
+
+def obtener_array(imagen_sitk):
+    """Dada una imagen itk la transformamos a np array y colocamos
+    las componentes de manera adecuada. """
+    img = sitk.GetArrayFromImage(imagen_sitk)
+    new_array = np.array(np.swapaxes(img, 0, 2))
+    new_array = np.array(np.swapaxes(new_array, 0, 1))
+
+    return new_array
+
+
+
 
 def resample(image, dim,  new_spacing=[1, 1, 1]):
     # Determine current pixel spacing
@@ -161,10 +149,27 @@ def plt_3d(verts, faces):
 
 def obterner_array_overlay(pulmones_sitk, nodulo_sitk):
     """pulmones_sitk es la segmentación de los pulmones, nodulo_sitk es una
-    mascara del nodulo cancerigeno. Devuelve un array RGB con la zona de la
-    máscara resaltada. """
-
+    mascara del nodulo cancerigeno """
+    nodulo_sitk.CopyInformation(pulmones_sitk)
+    pulmones_sitk = sitk.RescaleIntensity(pulmones_sitk, 0, 255)
+    pulmones_sitk = sitk.Cast(pulmones_sitk, sitk.sitkUInt8)
+    nodulo_sitk = sitk.Cast(nodulo_sitk, sitk.sitkUInt8)
     overlay = sitk.LabelOverlay(
-        pulmones_sitk, nodulo_sitk, opacity=0.1, backgroundValue=0)
+        pulmones_sitk, nodulo_sitk, opacity=0.3, backgroundValue=0)
 
     return obtener_array(overlay)
+
+
+def obtener_slice_nodulo(nodulo_sitk):
+    nodulo_array = obtener_array(nodulo_sitk)
+    pixeles_mayor, indice_mayor = 0, 0
+
+    for i in range(nodulo_array.shape[2]):
+        pixeles_actual = np.sum(nodulo_array[:, :, i])
+        if pixeles_actual > pixeles_mayor:
+            pixeles_mayor = pixeles_actual
+            indice_mayor = i
+        if pixeles_actual < pixeles_mayor:
+            break
+
+    return indice_mayor

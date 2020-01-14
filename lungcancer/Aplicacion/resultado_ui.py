@@ -8,6 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -26,7 +27,8 @@ class Ui_Form(object):
         self.label_3d_2.setGeometry(QtCore.QRect(550, 210, 321, 251))
         self.label_3d_2.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label_3d_2.setText("")
-        self.label_3d_2.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
+        self.label_3d_2.setAlignment(
+            QtCore.Qt.AlignHCenter | QtCore.Qt.AlignTop)
         self.label_3d_2.setObjectName("label_3d_2")
         self.label_min_slice_2 = QtWidgets.QLabel(Form)
         self.label_min_slice_2.setGeometry(QtCore.QRect(520, 160, 46, 13))
@@ -60,11 +62,13 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "LCDetection"))
-        self.label_resultado.setText(_translate("Form", "El paciente tiene un cáncer con las siguientes características :"))
+        self.label_resultado.setText(_translate(
+            "Form", "El paciente tiene un cáncer con las siguientes características :"))
         self.button_3d_2.setText(_translate("Form", "Ver en 3d"))
         self.label_min_slice_2.setText(_translate("Form", "1"))
         self.button_slice_2.setText(_translate("Form", "Ok"))
-        self.button_visualizacion.setText(_translate("Form", "Ver Sólo el nódulo"))
+        self.button_visualizacion.setText(
+            _translate("Form", "Ver Sólo el nódulo"))
 
 
 if __name__ == "__main__":
@@ -75,4 +79,3 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-
