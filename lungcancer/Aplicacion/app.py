@@ -81,7 +81,6 @@ class MainWindow(QMainWindow, mplWidget, Ui_LCDetection):
             self.widget.canvas.draw()
 
     def segmentar_pulmon(self):
-        "abcdefghijklmnñopqrstuvwxyzabcdefghijklmnñopqrstuvwxyzaaaaaaaa\na\na\na\na\nb\nc\nd\ne\f\g\nh\ni\nj\nk\nl"
         self.label_3d.setText(
             "El proceso para realizar la segmentación consiste en:\n1) Suavizado gaussiano\n2) Binarización mediante crecimiento de regiones\n3) Cierre morfológico\n4) Multiplicar la máscara con la imagen original")
         self.label_3d.setAlignment(QtCore.Qt.AlignLeft)
@@ -116,7 +115,7 @@ class MainWindow(QMainWindow, mplWidget, Ui_LCDetection):
             "Espere mientras se realiza todo el proceso para la obtención del nódulo\n y la extracción de sus características. Sea paciente, puede demorarse unos minutos...")
         self.label_instrucciones.repaint()
         self.label_3d.setText(
-            "El proceso de la segmentación 3D del interior de los pulmones es el siguiente:\n1) Gradiente 3D de la imagen\n2) Calcular módulo del gradiente\n3) Algoritmo de watershed en 3D")
+            "El proceso de la segmentación 3D del interior de los\n pulmones es el siguiente:\n1) Gradiente 3D de la imagen\n2) Calcular módulo del gradiente\n3) Algoritmo de watershed en 3D")
         self.label_3d.repaint()
         self.map = 1
         main.realizar_watershed(main.pulmones_sitk)
@@ -148,7 +147,7 @@ class MainWindow(QMainWindow, mplWidget, Ui_LCDetection):
                                      + str((round(elongation, 3), round(float(energy), 3), round(float(sphericity), 3))) +
                                      "\nEl nódulo cancerígeno se encuentra en la slice: " + str(fun.obtener_slice_nodulo(main.nodulo_segmentado)))
         self.label_3d.setText(
-            "Para obtener los nódulos filtramos las regiones\nde watershed y comprobamos cuales \nde estas tienen las características \nde los nódulos cancerígenos basándonos \nen los descriptores de elongación, energía \ny esfericidad.")
+            "Para obtener los nódulos filtramos las regiones de watershed\n y comprobamos cuales de estas tienen las características de\n los nódulos cancerígenos basándonos en los descriptores de\n elongación, energía y esfericidad.")
         main.nodulo_overlay = fun.obterner_array_overlay(
             main.pulmones_sitk, main.nodulo_segmentado)
         main.representado = main.nodulo_overlay
