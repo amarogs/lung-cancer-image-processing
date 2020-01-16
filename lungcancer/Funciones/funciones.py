@@ -5,10 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.ndimage
 import SimpleITK as sitk
-import skimage
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from plotly.graph_objs import *
-from plotly.offline import download_plotlyjs, init_notebook_mode, iplot, plot
+from plotly.offline import  iplot
 from plotly.tools import FigureFactory as FF
 from skimage import measure
 
